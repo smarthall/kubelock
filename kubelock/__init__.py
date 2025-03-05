@@ -46,5 +46,5 @@ def property_handler(interface_name, changed_properties, invalidated_properties)
         os.remove(kubeconfig)
 
 def signal_handler(sig, frame):
-    if sig == signal.SIGTERM:
+    if sig == signal.SIGTERM and loop.is_running():
         loop.quit()
