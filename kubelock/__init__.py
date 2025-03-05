@@ -6,10 +6,12 @@ from pathlib import Path
 from pydbus import SystemBus
 from gi.repository import GLib
 
+
 loop = GLib.MainLoop()
 
 LOCK_BUS = "org.freedesktop.login1"
 SEAT_OBJ = ""
+
 
 def cli():
     bus = SystemBus()
@@ -23,12 +25,13 @@ def cli():
     # Subscribe to property changes
     session.PropertiesChanged.connect(property_handler)
 
-    # Start the main loop
+    # Handle exit signals
     signal.signal(signal.SIGTERM, signal_handler)
-    try:
-        loop.run()
-    except KeyboardInterrupt:
-        pass
+    signal.signal(signal.SIGINT, signal_handler)
+
+    # Start the main loop
+    loop.run()
+
 
 def property_handler(interface_name, changed_properties, invalidated_properties):
     # Is it a property we are interested in?
@@ -45,6 +48,7 @@ def property_handler(interface_name, changed_properties, invalidated_properties)
     if os.path.exists(kubeconfig):
         os.remove(kubeconfig)
 
+
 def signal_handler(sig, frame):
-    if sig == signal.SIGTERM and loop.is_running():
+    if sig in (signal.SIGTERM, signal.SIGINT) and loop.is_running():
         loop.quit()
