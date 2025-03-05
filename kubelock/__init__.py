@@ -1,4 +1,5 @@
 import os
+import signal
 
 from pathlib import Path
 
@@ -22,6 +23,8 @@ def cli():
     # Subscribe to property changes
     session.PropertiesChanged.connect(property_handler)
 
+    # Start the main loop
+    signal.signal(signal.SIGTERM, signal_handler)
     try:
         loop.run()
     except KeyboardInterrupt:
@@ -41,3 +44,7 @@ def property_handler(interface_name, changed_properties, invalidated_properties)
     kubeconfig = Path.home() / ".kube" / "config"
     if os.path.exists(kubeconfig):
         os.remove(kubeconfig)
+
+def signal_handler(sig, frame):
+    if sig == signal.SIGTERM:
+        loop.quit()
