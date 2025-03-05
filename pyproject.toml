@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "kubelock"
+version = "0.1.0"
+description = "Deletes the kubectl config file when the screen is locked."
+authors = ["Daniel Hall <kubelock@danielhall.me>"]
+license = "GPL"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pydbus = "^0.6.0"
+
+[tool.poetry.scripts]
+kubelock = "kubelock:cli"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
