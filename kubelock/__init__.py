@@ -10,7 +10,6 @@ from gi.repository import GLib
 loop = GLib.MainLoop()
 
 LOCK_BUS = "org.freedesktop.login1"
-SEAT_OBJ = ""
 
 
 def cli():
